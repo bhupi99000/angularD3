@@ -17,10 +17,10 @@
         var w = elm.attr('width');
         var h = elm.attr('height');
         var margin = {
-            top: config.margin && config.margin.top || 80,
+            top: config.margin && config.margin.top || 40,
             right: config.margin && config.margin.right || 20,
             bottom: config.margin && config.margin.bottom || 20,
-            left: config.margin && config.margin.left || 80
+            left: config.margin && config.margin.left || 40
         };
         var width = w - margin.left - margin.right;
         var height = h - margin.top - margin.bottom;
@@ -59,7 +59,7 @@
             wrapper.append('g')
                    .attr({
                        class: 'axis xAxis',
-                       transform: 'translate(0,0)'
+                       transform: 'translate(0,'+(this.config.height)+')'
                    })
                    .call(xAxis);
                 
@@ -102,7 +102,26 @@
                 .data(data)
                 .enter()
                 .append('rect')
-                .attr('class', 'bar');
+                .attr('class', 'bar')
+                .on('mouseover', function(d, i){
+                    var coordinates = d3.mouse(this);
+                    self.showTooltip({
+                        data: d,
+                        scale:{
+                            x: xScale,
+                            y: yScale
+                        },
+                        parent: wrapper,
+                        pos: coordinates
+                    });
+                })
+                .on('mousemove', function(d, i){
+                    var coordinates = d3.mouse(this);
+                    self.updateTooltipPos(coordinates);
+                })
+                .on('mouseout', function(d, i){
+                    self.removeTooltip();
+                })
 
             wrapper.selectAll('rect.bar')
                 .transition()
@@ -131,6 +150,51 @@
                 .data(data)
                 .exit()
                 .remove();
+        },
+
+        updateTooltipPos: function(pos){
+            d3.select('g.tooltip-wrap')
+                .attr('transform', 'translate('+(pos[0])+','+(pos[1] - 60)+')');
+        },
+
+        showTooltip: function(cnf){
+            var wrapper = cnf.parent;
+            var xScale = cnf.scale.x;
+            var yScale = cnf.scale.y;
+            var data = cnf.data;
+
+            var tooltipWrap = wrapper.append('g')
+                                .classed('tooltip-wrap', true)
+                                .attr('transform', 'translate('+(cnf.pos[0])+','+(cnf.pos[1])+')');
+
+            tooltipWrap.append('rect')
+                    .attr({
+                        class: 'tooltip',
+                        x: function(){
+                            return 0;
+                        },
+                        y: function(){
+                            return 0;
+                        },
+                        width: function(){
+                            return 100;
+                        },
+                        height: function(){
+                            return 50;
+                        },
+                        fill: function(){
+                            return '#ccc';
+                        }
+                    });
+            
+            tooltipWrap.append('text')
+                    .attr('class', 'msg')
+                    .text(function(){
+                        return data.key+' '+data.value;
+                    })
+        },
+        removeTooltip: function(){
+            d3.select('.tooltip-wrap').remove();
         }
     };
 
