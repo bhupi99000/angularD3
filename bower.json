@@ -2,7 +2,7 @@
   "name": "D3Angular",
   "homepage": "https://github.com/bhupi99000/angularD3",
   "description": "my angular learning",
-  "main": "app.js",
+  "main": "script/app.js",
   "keywords": [
     "D3"
   ],
@@ -19,6 +19,7 @@
   ],
   "devDependencies": {
     "d3": "3.5",
-    "angular": "^1.5.8"
+    "angular": "^1.5.8",
+    "angular-ui-router": "ui-router#^0.3.1"
   }
 }
