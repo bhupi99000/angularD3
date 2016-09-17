@@ -1,0 +1,24 @@
+{
+  "name": "D3Angular",
+  "homepage": "https://github.com/bhupi99000/angularD3",
+  "description": "my angular learning",
+  "main": "app.js",
+  "keywords": [
+    "D3"
+  ],
+  "authors": [
+    "Bhupesh"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "devDependencies": {
+    "d3": "3.5",
+    "angular": "^1.5.8"
+  }
+}
